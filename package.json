@@ -1,0 +1,23 @@
+{
+  "name": "self-study-typescript",
+  "version": "1.0.0",
+  "description": "self study",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "main": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://narerkrit-tw@github.com/narerkrit-tw/self-study-typescript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/narerkrit-tw/self-study-typescript/issues"
+  },
+  "homepage": "https://github.com/narerkrit-tw/self-study-typescript#readme",
+  "dependencies": {
+    "typescript": "^3.8.3"
+  }
+}
