@@ -16,6 +16,14 @@
     "semi": ["error", "never"],
     "no-template-curly-in-string": ["error"],
     "eqeqeq": ["error", "always"],
-    "quotes": ["warn", "double"]
+    "quotes": ["warn", "double"],
+    "array-bracket-spacing": ["warn", "never"],
+    "comma-spacing": [
+      "warn",
+      {
+        "before": false,
+        "after": true
+      }
+    ]
   }
 }
