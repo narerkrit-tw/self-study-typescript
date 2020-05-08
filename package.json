@@ -4,8 +4,9 @@
   "description": "self study",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "main": "node main.js"
+    "test": "yarn jest",
+    "main": "node main.js",
+    "format": "yarn eslint ./src/* --fix"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,16 @@
   },
   "homepage": "https://github.com/narerkrit-tw/self-study-typescript#readme",
   "dependencies": {
+    "fp-ts": "^2.5.4",
+    "tiny-types": "^1.14.1",
     "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
+    "eslint": "^6.8.0",
+    "jest": "^26.0.1",
+    "ts-jest": "^25.5.0"
   }
 }

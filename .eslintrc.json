@@ -1,0 +1,21 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+
+  "rules": {
+    "semi": ["error", "never"],
+    "no-template-curly-in-string": ["error"],
+    "eqeqeq": ["error", "always"],
+    "quotes": ["warn", "double"]
+  }
+}

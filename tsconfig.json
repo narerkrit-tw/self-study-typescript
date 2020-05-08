@@ -3,9 +3,12 @@
     "target": "es6",
     "module": "commonjs",
     "sourceMap": true,
-    "outDir": "compiled"
+    "outDir": "compiled",
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["src/*"],
+      "test/*": ["test/*"]
+    }
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*", "test/**/*"]
 }
