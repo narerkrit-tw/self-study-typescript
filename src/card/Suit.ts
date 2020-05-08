@@ -33,6 +33,7 @@ export default class Suit extends TinyType {
 }
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function match(s: Suit): string {
   switch (s.name) {
     case "club": return  "it is a club"
