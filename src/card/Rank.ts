@@ -18,6 +18,22 @@ export default class Rank extends TinyType {
   static K = new Rank(13)
   static A = new Rank(14)
 
+  static All = [
+    Rank.V2, 
+    Rank.V3, 
+    Rank.V4, 
+    Rank.V5, 
+    Rank.V6,
+    Rank.V7,
+    Rank.V8,
+    Rank.V9,
+    Rank.V10,
+    Rank.J,
+    Rank.Q,
+    Rank.K,
+    Rank.A,
+   ]
+
   private constructor(
     public readonly innateValue: number
   ) {
