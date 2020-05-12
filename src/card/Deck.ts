@@ -44,6 +44,15 @@ export default class Deck {
     return this.transform(A.dropLeft(1))
   }
 
+  shuffled(genRandom: () => number = Math.random): Deck {
+    return this.transform((cs) =>
+      cs
+        .map((c) => ({ sort: genRandom(), value: c }))
+        .sort((a, b) => a.sort - b.sort)
+        .map((o) => o.value)
+    )
+  }
+
   static freshFromPack(): Deck {
     const ranks = Rank.All
     const suits = Suit.All
@@ -80,10 +89,13 @@ const drawBurnN: Func<number, DrawCards> = (n) => {
     .reduce(joinCardDraws, S.state.of([] as Array<Card>))
 }
 
+const shuffle: DrawNothing = S.modify((d) => d.shuffled())
+
 export const DeckOps = {
   drawN,
   drawOne,
   burn,
   drawBurnOne,
   drawBurnN,
+  shuffle,
 }

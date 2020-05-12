@@ -31,6 +31,14 @@ describe("deck", () => {
     const burntDeck = deck.burnOne()
     expect(burntDeck.count()).toEqual(51)
   })
+
+  it("should shuffle", () => {
+    const unshuffled = Deck.freshFromPack()
+    const shuffled = unshuffled.shuffled()
+    const unshuffledCards = unshuffled.drawN(52)[0]
+    const shuffledCards = shuffled.drawN(52)[0]
+    expect(unshuffledCards).not.toEqual(shuffledCards)
+  })
 })
 
 describe("deck ops", () => {
