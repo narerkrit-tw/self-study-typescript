@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "yarn jest",
+    "testq": "yarn jest -o",
     "main": "node main.js",
     "format": "yarn eslint ./src/**/* --fix"
   },
@@ -30,6 +31,7 @@
     "@typescript-eslint/parser": "^2.31.0",
     "eslint": "^6.8.0",
     "jest": "^26.0.1",
+    "jest-extended": "^0.11.5",
     "ts-jest": "^25.5.0"
   }
 }
