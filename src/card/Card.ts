@@ -1,7 +1,10 @@
+import * as Eq from "fp-ts/lib/Eq"
+import * as Ord from "fp-ts/lib/Ord"
 import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
 import { TinyType } from "tiny-types"
 import { CardComparison, RankDifference, SuitDifference } from "./CardComparison"
+
 
 export default class Card extends TinyType {
   static of(rank: Rank, suit: Suit): Card {
@@ -26,7 +29,12 @@ export default class Card extends TinyType {
   }
 
   sameRankAs(that: Card): boolean {
-    return this.rank === that.rank
+    return this.rank.equals(that.rank)
   }
+
+  static IsEq = Eq.fromEquals<Card>( (c1, c2) => c1.equals(c2))
+  
+  static OrdByRank = Ord.contramap( (c: Card) => c.rank)(Rank.IsBounded)
+  static OrdByRankReverse = Ord.getDualOrd(Card.OrdByRank)
 }
 
