@@ -1,29 +1,26 @@
 import { Do } from "fp-ts-contrib/lib/Do"
-import * as A from "fp-ts/lib/Array"
 import * as Fn from "fp-ts/lib/function"
+import * as RA from "fp-ts/lib/ReadonlyArray"
 import * as S from "fp-ts/lib/State"
 import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
+import { Func } from "src/misc/Func"
+import { TinyType } from "tiny-types"
 
 type Draw<A> = S.State<Deck, A>;
-type DrawCards = Draw<Array<Card>>;
+type DrawCards = Draw<ReadonlyArray<Card>>;
 type DrawNothing = Draw<void>;
 
-type CardsAndDeck = [Array<Card>, Deck];
+type CardsAndDeck = [ReadonlyArray<Card>, Deck];
 
-interface Func<S, T> {
-  (s: S): T;
-}
+export default class Deck extends TinyType {
 
-export default class Deck {
-  private cards: Card[];
-
-  private constructor(cards: Card[]) {
-    this.cards = cards
+  private constructor(private readonly cards: ReadonlyArray<Card>) {
+    super()
   }
 
-  private transform(fn: (c: Card[]) => Card[]): Deck {
+  private transform(fn: (c: ReadonlyArray<Card>) => ReadonlyArray<Card>): Deck {
     return new Deck(fn(this.cards))
   }
 
@@ -33,7 +30,7 @@ export default class Deck {
 
   drawN(n: number): CardsAndDeck {
     const intN = Math.floor(n)
-    return [A.takeLeft(intN)(this.cards), this.transform(A.dropLeft(intN))]
+    return [RA.takeLeft(intN)(this.cards), this.transform(RA.dropLeft(intN))]
   }
 
   drawOne(): CardsAndDeck {
@@ -41,7 +38,7 @@ export default class Deck {
   }
 
   burnOne(): Deck {
-    return this.transform(A.dropLeft(1))
+    return this.transform(RA.dropLeft(1))
   }
 
   shuffled(genRandom: () => number = Math.random): Deck {
@@ -57,7 +54,7 @@ export default class Deck {
     const ranks = Rank.All
     const suits = Suit.All
 
-    const cards = Do(A.array)
+    const cards = Do(RA.readonlyArray)
       .bind("s", suits)
       .bind("r", ranks)
       .return(({ r, s }) => Card.of(r, s))
@@ -72,9 +69,9 @@ const drawOne: DrawCards = drawN(1)
 const burn: DrawNothing = S.modify((d) => d.burnOne())
 
 const drawBurnOne: DrawCards = Do(S.state)
-  .bind("d", drawOne)
-  .bind("x", burn)
-  .return((ctx) => ctx.d)
+  .bind("cards", drawOne)
+  .do(burn)
+  .return((ctx) => ctx.cards)
 
 function joinCardDraws(s1: DrawCards, s2: DrawCards): DrawCards {
   return Do(S.state)
@@ -84,7 +81,7 @@ function joinCardDraws(s1: DrawCards, s2: DrawCards): DrawCards {
 }
 
 const drawBurnN: Func<number, DrawCards> = (n) => {
-  return A.range(1, n)
+  return RA.range(1, n)
     .map(Fn.constant(drawBurnOne))
     .reduce(joinCardDraws, S.state.of([] as Array<Card>))
 }
