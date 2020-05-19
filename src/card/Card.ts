@@ -1,5 +1,7 @@
 import * as Eq from "fp-ts/lib/Eq"
+import * as M from "fp-ts/lib/Monoid"
 import * as Ord from "fp-ts/lib/Ord"
+import { pipe } from "fp-ts/lib/pipeable"
 import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
 import { TinyType } from "tiny-types"
@@ -36,5 +38,15 @@ export default class Card extends TinyType {
   
   static OrdByRank = Ord.contramap( (c: Card) => c.rank)(Rank.IsBounded)
   static OrdByRankReverse = Ord.getDualOrd(Card.OrdByRank)
+
+  static OrdByRankSuit: Ord.Ord<Card> = 
+    M.fold(Ord.getMonoid<Card>())([
+      Card.OrdByRank, 
+      pipe(
+        Suit.IsBounded,
+        Ord.contramap((c: Card) => c.suit)
+    )])
+
+  static OrdByRankSuitReverse = Ord.getDualOrd(Card.OrdByRankSuit)
 }
 
