@@ -10,7 +10,7 @@ import { Pair } from "src/game/Combo"
 
 type NEACard = NEA.ReadonlyNonEmptyArray<Card>
 
-describe("pair combo", () => {
+describe("combo: pair", () => {
 
   const ASpade = Card.of(Rank.A, Suit.Spade)
   const AClub = Card.of(Rank.A, Suit.Club)
