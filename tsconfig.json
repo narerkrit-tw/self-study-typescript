@@ -10,5 +10,9 @@
       "test/*": ["test/*"]
     }
   },
-  "include": ["src/**/*", "test/**/*"]
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "node_modules/jest-extended/types/**/*.d.ts"
+  ]
 }
