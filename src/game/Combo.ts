@@ -1,4 +1,6 @@
+import * as M from "fp-ts/lib/Monoid"
 import * as Opt from "fp-ts/lib/Option"
+import * as Ord from "fp-ts/lib/Ord"
 import { pipe } from "fp-ts/lib/pipeable"
 import * as A from "fp-ts/lib/ReadonlyArray"
 import * as NEA from "fp-ts/lib/ReadonlyNonEmptyArray"
@@ -9,8 +11,6 @@ import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
 import { TinyType } from "tiny-types"
 import { Kicker } from "./Kicker"
-
-
 
 export type Combo = HighCard | Pair
 
@@ -35,7 +35,7 @@ export class HighCard extends TinyType implements ComboBase {
   }
 
   static fromCards(cards: Nea<Card>): HighCard {
-    const highestCard = NEA.max(Card.OrdByRank)(cards)
+    const highestCard = NEA.max(Card.OrdByRankSuit)(cards)
 
     const kicker = pipe(
       cards,
@@ -45,6 +45,12 @@ export class HighCard extends TinyType implements ComboBase {
     )
     return new HighCard(highestCard, kicker)
   }
+
+  static IsOrd: Ord.Ord<HighCard> = 
+    M.fold(Ord.getMonoid<HighCard>())([
+      Ord.contramap((h: HighCard) => h.card)(Card.OrdByRank),
+      Ord.contramap((h: HighCard) => h.kicker)(Kicker.IsOrd),
+    ])
 }
 
 export class Pair extends TinyType {

@@ -27,6 +27,6 @@ export class Kicker extends TinyType {
   }
 
   static of = (cards: ReadonlyArray<Card>): Kicker => new Kicker(A.sort(Card.OrdByRank)(cards));
-
+  static empty = Kicker.of([])
   static IsOrd: Ord<Kicker> = ord.contramap(OrdSortedHL(Card.OrdByRank), (k: Kicker) => k.cards)
 }
