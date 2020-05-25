@@ -5,7 +5,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@V1
+      - uses: actions/checkout@v1
       - name: install yarn
         run: npm install -g yarn
       - name: install dependencies
