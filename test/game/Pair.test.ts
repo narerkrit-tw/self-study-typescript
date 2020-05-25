@@ -5,7 +5,7 @@ import "jest-extended"
 import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
-import { Pair } from "src/game/Combo"
+import { Pair } from "src/game/combo/Pair"
 
 
 type NEACard = NEA.ReadonlyNonEmptyArray<Card>

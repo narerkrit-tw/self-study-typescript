@@ -4,7 +4,7 @@ import "jest-extended"
 import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
-import { HighCard } from "src/game/Combo"
+import { HighCard } from "src/game/combo/HighCard"
 import { Kicker } from "src/game/Kicker"
 
 
