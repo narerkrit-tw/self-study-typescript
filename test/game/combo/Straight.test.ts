@@ -46,7 +46,7 @@ describe("combo - straight", () => {
     expect(result.cards).toIncludeSameMembers(lowStraitCards.concat())
     expect(result.kicker.cards).toIncludeSameMembers(extras)
   })
-  it("should include single card when multiple of same ranks in straight", () => {
+  it("should include single card of a rank when multiple of same ranks in straight", () => {
     const extras = [Card.of(Rank.K, Suit.Diamond), Card.of(Rank.V10, Suit.Club)]
     const cards = NEA.concat(extras, highStraitCards)
     const result = pipe(cards, Straight.fromCards, Opt.toNullable)
@@ -66,7 +66,7 @@ describe("combo - straight", () => {
     expect(result.cards).toIncludeSameMembers(bottomStraightCards.concat())
     expect(result.kicker.cards).toIncludeSameMembers(extras)
   })
-  it("should return highest possible straight if more than 5 cards consecutive", () => {
+  it("should return highest possible 5-card straight if more than 5 cards consecutive", () => {
     const extras = [Card.of(Rank.V9, Suit.Club), Card.of(Rank.V8, Suit.Spade)]
     const cards = NEA.concat(highStraitCards, extras)
     

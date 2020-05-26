@@ -1,4 +1,7 @@
+import * as M from "fp-ts/lib/Monoid"
 import * as Opt from "fp-ts/lib/Option"
+import * as Ord from "fp-ts/lib/Ord"
+import { Ordering } from "fp-ts/lib/Ordering"
 import { pipe } from "fp-ts/lib/pipeable"
 import * as A from "fp-ts/lib/ReadonlyArray"
 import * as NEA from "fp-ts/lib/ReadonlyNonEmptyArray"
@@ -11,12 +14,22 @@ import { Kicker } from "../Kicker"
 import { ComboBase } from "./ComboBase"
 import { StraightReducerState } from "./StraightReducerState"
 
-export class Straight extends TinyType implements ComboBase {
-  kind: "Straight";
-  comboRank: 4;
+
+export class Straight extends TinyType implements ComboBase<Straight> {
+  kind: "Straight"
+  comboRank: 4
   private constructor(public readonly topCardRank: Rank, public readonly cards: Nea<Card>, public readonly kicker: Kicker) {
     super()
   }
+  compare(that: Straight): Ordering {
+    return Straight.IsOrd.compare(this, that)
+  }
+
+  static IsOrd: Ord.Ord<Straight> = M.fold(Ord.getMonoid<Straight>())([
+    Ord.contramap((s: Straight) => s.topCardRank)(Rank.IsBounded),
+    Ord.contramap((h: Straight) => h.kicker)(Kicker.IsOrd),
+  ]);
+
   static fromCards(cards: Nea<Card>): Opt.Option<Straight> {
 
     const copyAcesToTail: Func<Nea<Card>, Nea<Card>> = cards => {

@@ -1,23 +1,29 @@
 import * as M from "fp-ts/lib/Monoid"
 import * as Opt from "fp-ts/lib/Option"
 import * as Ord from "fp-ts/lib/Ord"
+import { Ordering } from "fp-ts/lib/Ordering"
+import { pipe } from "fp-ts/lib/pipeable"
 import * as A from "fp-ts/lib/ReadonlyArray"
 import * as NEA from "fp-ts/lib/ReadonlyNonEmptyArray"
-
-import { pipe } from "fp-ts/lib/pipeable"
 import { ReadonlyNonEmptyArray as Nea } from "fp-ts/lib/ReadonlyNonEmptyArray"
 import Card from "src/card/Card"
+import { ComboBase } from "src/game/combo/ComboBase"
 import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
+import { Kicker } from "src/game/Kicker"
 import { TinyType } from "tiny-types"
-import { Kicker } from "../Kicker"
-import { ComboBase } from "./ComboBase"
-export class HighCard extends TinyType implements ComboBase {
+
+export class HighCard extends TinyType implements ComboBase<HighCard> {
   kind: "HighCard";
   comboRank: 0;
   constructor(public readonly card: Card, public readonly kicker: Kicker) {
     super()
   }
+  
+  compare(that: HighCard): Ordering {
+    return HighCard.IsOrd.compare(this, that)
+  }
+  
   static fromHandAndCommunityCards(h: Hand, cc: CommunityCards): HighCard {
     return this.fromCards(NEA.concat(h.cards, cc.cards))
   }

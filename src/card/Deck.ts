@@ -62,7 +62,7 @@ export default class Deck extends TinyType {
   }
 }
 
-const drawN: Func<number, DrawCards> = (n) => (d) => d.drawN(n)
+const drawN: Func<number, DrawCards> = n => d => d.drawN(n)
 
 const drawOne: DrawCards = drawN(1)
 
