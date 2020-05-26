@@ -34,7 +34,7 @@ describe("combo: pair", () => {
   it("should create from pair of card from same rank", () => {
     const cards = [ASpade, AHeart, QHeart, SixClub] as NEACard
     const result = pipe(cards, Pair.fromCards, Opt.toNullable)
-    expect(result).not.toBeNull
+    expect(result).not.toBeNull()
     expect(result.pairRank).toEqual(Rank.A)
     expect(result.kicker.cards).toIncludeSameMembers([QHeart, SixClub])
     expect(result.cards).toIncludeSameMembers([ASpade, AHeart])
@@ -43,7 +43,7 @@ describe("combo: pair", () => {
   it("should return pair of highest rank, when multiple pair combos available", () => {
     const cards = [SixClub, QHeart, QClub, ASpade, AHeart] as NEACard
     const result = pipe(cards, Pair.fromCards, Opt.toNullable)
-    expect(result).not.toBeNull
+    expect(result).not.toBeNull()
     expect(result.pairRank).toEqual(Rank.A)
     expect(result.cards).toIncludeSameMembers([ASpade, AHeart])
     expect(result.kicker.cards).toIncludeSameMembers([QHeart, QClub, SixClub])
@@ -51,7 +51,7 @@ describe("combo: pair", () => {
   it("should return pair of any 2 cards when more than 2 cards of same rank available", () => {
     const cards = [ASpade, AHeart, AClub, ADiamond, SixClub] as NEACard
     const result = pipe(cards, Pair.fromCards, Opt.toNullable)
-    expect(result).not.toBeNull
+    expect(result).not.toBeNull()
     expect(result.pairRank).toEqual(Rank.A)
     expect(result.cards).toHaveLength(2)
     expect(result.kicker.cards).toHaveLength(3)
