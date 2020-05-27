@@ -8,21 +8,29 @@ import * as NEA from "fp-ts/lib/ReadonlyNonEmptyArray"
 import { ReadonlyNonEmptyArray as Nea } from "fp-ts/lib/ReadonlyNonEmptyArray"
 import Card from "src/card/Card"
 import Rank from "src/card/Rank"
+import { Combo } from "src/game/combo/Combo"
 import { Func } from "src/misc/Func"
-import { TinyType } from "tiny-types"
-import { Kicker } from "../Kicker"
-import { ComboBase } from "./ComboBase"
-import { StraightReducerState } from "./StraightReducerState"
+import Kicker from "../Kicker"
+import ComboBase from "./ComboBase"
+import StraightReducerState from "./StraightReducerState"
 
 
-export class Straight extends TinyType implements ComboBase<Straight> {
-  kind: "Straight"
-  comboRank: 4
+export default class Straight extends ComboBase {
+
   private constructor(public readonly topCardRank: Rank, public readonly cards: Nea<Card>, public readonly kicker: Kicker) {
-    super()
+    super("Straight", 4)
   }
+  
   compare(that: Straight): Ordering {
     return Straight.IsOrd.compare(this, that)
+  }
+
+  compareCombo(that: Combo): Ordering {
+    if(that instanceof Straight) {
+      return this.compare(that)
+    } else {
+      return this.compareRank(that)
+    }
   }
 
   static IsOrd: Ord.Ord<Straight> = M.fold(Ord.getMonoid<Straight>())([

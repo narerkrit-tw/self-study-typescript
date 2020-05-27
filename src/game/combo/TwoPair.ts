@@ -9,19 +9,30 @@ import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
-import { TinyType } from "tiny-types"
-import { Kicker } from "../Kicker"
-import { ComboBase } from "./ComboBase"
-import { Pair } from "./Pair"
+import Kicker from "../Kicker"
+import { Combo } from "./Combo"
+import ComboBase from "./ComboBase"
+import Pair from "./Pair"
 
-export class TwoPair extends TinyType implements ComboBase<TwoPair> {
+export default class TwoPair extends ComboBase {
+ 
   kind: "TwoPair";
   comboRank: 2;
+  
   private constructor(public readonly highPairRank: Rank, public readonly lowPairRank: Rank, public readonly highPairCards: [Card, Card], public readonly lowPairCards: [Card, Card], public readonly kicker: Kicker) {
-    super()
+    super("TwoPair", 2)
   }
+  
   compare(that: TwoPair): Ordering {
     return TwoPair.IsOrd.compare(this, that)
+  }
+
+  compareCombo(that: Combo): Ordering {
+    if(that instanceof TwoPair) {
+      return this.compare(that)
+    } else {
+      return this.compareRank(that)
+    }
   }
   
   static fromCards(cards: Nea<Card>): Opt.Option<TwoPair> {

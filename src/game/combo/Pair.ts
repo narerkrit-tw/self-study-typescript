@@ -7,23 +7,32 @@ import * as NEA from "fp-ts/lib/ReadonlyNonEmptyArray"
 import { ReadonlyNonEmptyArray as Nea } from "fp-ts/lib/ReadonlyNonEmptyArray"
 import Card from "src/card/Card"
 import Rank from "src/card/Rank"
+import { Combo } from "src/game/combo/Combo"
 import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
-import { TinyType } from "tiny-types"
-import { Kicker } from "../Kicker"
-import { ComboBase } from "./ComboBase"
+import Kicker from "../Kicker"
+import ComboBase from "./ComboBase"
 
 
-export class Pair extends TinyType implements ComboBase<Pair> {
+export default class Pair extends ComboBase {
+  
   kind: "Pair";
   comboRank: 1;
   
   constructor(public readonly pairRank: Rank, public readonly cards: [Card, Card], public readonly kicker: Kicker) {
-    super()
+    super("Pair", 1)
   }
   
   compare(that: Pair): Ordering {
     return Pair.IsOrd.compare(this, that)
+  }
+
+  compareCombo(that: Combo): Ordering {
+    if(that instanceof Pair){
+      return this.compare(that)
+    } else {
+      return this.compareRank(that)
+    }
   }
 
   static fromCards(allCards: Nea<Card>): Opt.Option<Pair> {

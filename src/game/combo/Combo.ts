@@ -1,13 +1,11 @@
-import { HighCard } from "./HighCard"
-import { Pair } from "./Pair"
-import { Straight } from "./Straight"
-import { TwoPair } from "./TwoPair"
+import * as Ord from "fp-ts/lib/Ord"
+import HighCard from "./HighCard"
+import Pair from "./Pair"
+import Straight from "./Straight"
+import TwoPair from "./TwoPair"
 
-export type Combo = HighCard | Pair | TwoPair | Straight;
-
-// export const ComboIsOrd = M.fold(Ord.getMonoid<Combo>())([
-//   Ord.contramap((c: Combo) => c.comboRank)( Ord.ordNumber),
-// ])
+export type Combo = HighCard | Pair | TwoPair | Straight
+export const ComboIsOrd = Ord.fromCompare<Combo>( (a, b) => a.compareCombo(b))
 
 
 

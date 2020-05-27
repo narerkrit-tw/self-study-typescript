@@ -5,7 +5,7 @@ import { ReadonlyNonEmptyArray as Nea } from "fp-ts/lib/ReadonlyNonEmptyArray"
 import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 
-export class StraightReducerState {
+export default class StraightReducerState {
   constructor(
     public readonly cards: Nea<Card>, 
     public readonly topCard: Card,

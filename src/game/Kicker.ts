@@ -6,7 +6,7 @@ import Card from "src/card/Card"
 import { OrdSortedHL } from "src/misc/CustomOrds"
 import { TinyType } from "tiny-types"
 
-export class Kicker extends TinyType {
+export default class Kicker extends TinyType {
 
   private constructor(
     public readonly cards: ReadonlyArray<Card>

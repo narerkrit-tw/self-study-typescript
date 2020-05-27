@@ -6,7 +6,7 @@ import "jest-extended"
 import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
-import { Straight } from "src/game/combo/Straight"
+import Straight from "src/game/combo/Straight"
 
 type NeaCard = ReadonlyNonEmptyArray<Card>
 

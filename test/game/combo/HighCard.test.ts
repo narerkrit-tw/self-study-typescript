@@ -4,8 +4,9 @@ import "jest-extended"
 import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
-import { HighCard } from "src/game/combo/HighCard"
-import { Kicker } from "src/game/Kicker"
+import HighCard from "src/game/combo/HighCard"
+import Pair from "src/game/combo/Pair"
+import Kicker from "src/game/Kicker"
 
 
 type NEACard = NEA.ReadonlyNonEmptyArray<Card>
@@ -46,5 +47,17 @@ describe("combo: high card", () => {
     const hc1 = new HighCard(AHeart, Kicker.of([QClub]))
     const hc2 = new HighCard(ADiamond, Kicker.of([QHeart]))
     expect(HighCard.IsOrd.equals(hc1, hc2)).toBeTrue()
+  })
+
+  it("should compare with another highcard as combo", () => {
+    const hc1 = new HighCard(AHeart, Kicker.of([QClub]))
+    const hc2 = new HighCard(ADiamond, Kicker.of([QHeart]))
+    expect(hc1.compareCombo(hc2)).toEqual(0)
+  })
+
+  it("should compare with other combo", () => {
+    const hc = new HighCard(AHeart, Kicker.of([QClub]))
+    const pair = new Pair(Rank.V6, [Card.of(Rank.V6, Suit.Diamond), Card.of(Rank.V6, Suit.Club)], Kicker.empty)
+    expect(hc.compareCombo(pair)).toEqual(-1)
   })
 })

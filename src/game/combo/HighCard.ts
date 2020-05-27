@@ -7,21 +7,30 @@ import * as A from "fp-ts/lib/ReadonlyArray"
 import * as NEA from "fp-ts/lib/ReadonlyNonEmptyArray"
 import { ReadonlyNonEmptyArray as Nea } from "fp-ts/lib/ReadonlyNonEmptyArray"
 import Card from "src/card/Card"
-import { ComboBase } from "src/game/combo/ComboBase"
+import ComboBase from "src/game/combo/ComboBase"
 import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
-import { Kicker } from "src/game/Kicker"
-import { TinyType } from "tiny-types"
+import Kicker from "src/game/Kicker"
+import { Combo } from "./Combo"
 
-export class HighCard extends TinyType implements ComboBase<HighCard> {
+export default class HighCard extends ComboBase {
   kind: "HighCard";
   comboRank: 0;
+  
   constructor(public readonly card: Card, public readonly kicker: Kicker) {
-    super()
+    super("HighCard", 0)
   }
   
   compare(that: HighCard): Ordering {
     return HighCard.IsOrd.compare(this, that)
+  }
+
+  compareCombo(that: Combo): Ordering {
+    if(that instanceof HighCard){
+      return this.compare(that)
+    } else {
+      return this.compareRank(that)
+    }
   }
   
   static fromHandAndCommunityCards(h: Hand, cc: CommunityCards): HighCard {
