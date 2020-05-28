@@ -10,7 +10,7 @@ import Rank from "src/card/Rank"
 import { Combo } from "src/game/combo/Combo"
 import ComboBase from "./ComboBase"
 import Kicker from "./Kicker"
-import { makeRankCombo, RankCombo } from "./RankComboExtractor"
+import { makeRankCombo, RankCombo } from "./ComboExtractor"
 
 
 export default class Pair extends ComboBase {
