@@ -5,7 +5,6 @@ import { pipe } from "fp-ts/lib/pipeable"
 import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
 import { TinyType } from "tiny-types"
-import { CardComparison, RankDifference, SuitDifference } from "./CardComparison"
 
 
 export default class Card extends TinyType {
@@ -17,13 +16,6 @@ export default class Card extends TinyType {
     public readonly rank: Rank, 
     public readonly suit: Suit) {
     super()
-  }
-
-  compare(that: Card): CardComparison {
-    if (this.sameRankAs(that))
-      return new SuitDifference(this.rank, this.suit.diff(that.suit))
-    else 
-      return new RankDifference(this.rank.diff(that.rank))
   }
 
   sameSuitAs(that: Card): boolean {
