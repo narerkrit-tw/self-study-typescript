@@ -7,18 +7,20 @@ import * as Sg from "fp-ts/lib/Semigroup"
 import Card from "src/card/Card"
 import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
+import HighCard from "./HighCard"
 import Pair from "./Pair"
 import Straight from "./Straight"
+import ThreeOfAKind from "./ThreeOfAKind"
 import TwoPair from "./TwoPair"
-import HighCard from "./HighCard"
 
-export type Combo = HighCard | Pair | TwoPair | Straight
+export type Combo = HighCard | Pair | TwoPair | ThreeOfAKind | Straight
 export const ComboIsOrd = Ord.fromCompare<Combo>( (a, b) => a.compareCombo(b))
 export const ComboSemigroupGreater = Sg.getJoinSemigroup<Combo>(ComboIsOrd)
 
 export const fromCards = (cards: Nea<Card> ): Combo => {
   const loaders: Nea< (_: Nea<Card>) => Opt.Option<Combo> > = [
     Straight.fromCards,
+    ThreeOfAKind.fromCards,
     TwoPair.fromCards,
     Pair.fromCards,
   ]
