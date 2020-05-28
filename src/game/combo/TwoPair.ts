@@ -9,9 +9,9 @@ import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
-import Kicker from "./Kicker"
 import { Combo } from "./Combo"
 import ComboBase from "./ComboBase"
+import Kicker from "./Kicker"
 import Pair from "./Pair"
 
 export default class TwoPair extends ComboBase {
@@ -19,7 +19,12 @@ export default class TwoPair extends ComboBase {
   kind: "TwoPair";
   comboRank: 2;
   
-  private constructor(public readonly highPairRank: Rank, public readonly lowPairRank: Rank, public readonly highPairCards: [Card, Card], public readonly lowPairCards: [Card, Card], public readonly kicker: Kicker) {
+  private constructor(
+    public readonly highPairRank: Rank, 
+    public readonly lowPairRank: Rank, 
+    public readonly highPairCards: [Card, Card], 
+    public readonly lowPairCards: [Card, Card], 
+    public readonly kicker: Kicker) {
     super("TwoPair", 2)
   }
   
