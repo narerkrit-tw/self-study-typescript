@@ -12,13 +12,15 @@ import Pair from "./Pair"
 import Straight from "./Straight"
 import ThreeOfAKind from "./ThreeOfAKind"
 import TwoPair from "./TwoPair"
+import Flush from "./Flush"
 
-export type Combo = HighCard | Pair | TwoPair | ThreeOfAKind | Straight
+export type Combo = HighCard | Pair | TwoPair | ThreeOfAKind | Straight | Flush
 export const ComboIsOrd = Ord.fromCompare<Combo>( (a, b) => a.compareCombo(b))
 export const ComboSemigroupGreater = Sg.getJoinSemigroup<Combo>(ComboIsOrd)
 
 export const fromCards = (cards: Nea<Card> ): Combo => {
   const loaders: Nea< (_: Nea<Card>) => Opt.Option<Combo> > = [
+    Flush.fromCards,
     Straight.fromCards,
     ThreeOfAKind.fromCards,
     TwoPair.fromCards,
