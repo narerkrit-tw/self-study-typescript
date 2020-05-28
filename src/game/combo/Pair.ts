@@ -10,7 +10,7 @@ import Rank from "src/card/Rank"
 import { Combo } from "src/game/combo/Combo"
 import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
-import Kicker from "../Kicker"
+import Kicker from "./Kicker"
 import ComboBase from "./ComboBase"
 
 

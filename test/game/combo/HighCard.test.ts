@@ -6,7 +6,7 @@ import Rank from "src/card/Rank"
 import Suit from "src/card/Suit"
 import HighCard from "src/game/combo/HighCard"
 import Pair from "src/game/combo/Pair"
-import Kicker from "src/game/Kicker"
+import Kicker from "src/game/combo/Kicker"
 
 
 type NEACard = NEA.ReadonlyNonEmptyArray<Card>

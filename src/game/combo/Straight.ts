@@ -10,7 +10,7 @@ import Card from "src/card/Card"
 import Rank from "src/card/Rank"
 import { Combo } from "src/game/combo/Combo"
 import { Func } from "src/misc/Func"
-import Kicker from "../Kicker"
+import Kicker from "./Kicker"
 import ComboBase from "./ComboBase"
 import StraightReducerState from "./StraightReducerState"
 

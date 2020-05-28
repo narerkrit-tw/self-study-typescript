@@ -5,8 +5,8 @@ import * as NEA from "fp-ts/lib/ReadonlyNonEmptyArray"
 import { ReadonlyNonEmptyArray as Nea } from "fp-ts/lib/ReadonlyNonEmptyArray"
 import * as Sg from "fp-ts/lib/Semigroup"
 import Card from "src/card/Card"
-import CommunityCards from "../CommunityCards"
-import Hand from "../Hand"
+import CommunityCards from "src/game/CommunityCards"
+import Hand from "src/game/Hand"
 import Pair from "./Pair"
 import Straight from "./Straight"
 import TwoPair from "./TwoPair"
@@ -16,7 +16,7 @@ export type Combo = HighCard | Pair | TwoPair | Straight
 export const ComboIsOrd = Ord.fromCompare<Combo>( (a, b) => a.compareCombo(b))
 export const ComboSemigroupGreater = Sg.getJoinSemigroup<Combo>(ComboIsOrd)
 
-export const  fromCards = (cards: Nea<Card> ): Combo => {
+export const fromCards = (cards: Nea<Card> ): Combo => {
   const loaders: Nea< (_: Nea<Card>) => Opt.Option<Combo> > = [
     Straight.fromCards,
     TwoPair.fromCards,

@@ -10,7 +10,7 @@ import Card from "src/card/Card"
 import ComboBase from "src/game/combo/ComboBase"
 import CommunityCards from "src/game/CommunityCards"
 import Hand from "src/game/Hand"
-import Kicker from "src/game/Kicker"
+import Kicker from "src/game/combo/Kicker"
 import { Combo } from "./Combo"
 
 export default class HighCard extends ComboBase {
