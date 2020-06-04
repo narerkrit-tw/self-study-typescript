@@ -1,53 +1,116 @@
 import * as Exp from "express"
-import * as EC from "express-serve-static-core"
 import { Do } from "fp-ts-contrib/lib/Do"
-import * as E from "fp-ts/lib/Either"
+import * as EI from "fp-ts/lib/Either"
 import * as HTTP from "http"
 import * as T from "io-ts"
+import { BooleanFromString } from "io-ts-types/lib/BooleanFromString"
+import { NumberFromString } from "io-ts-types/lib/NumberFromString"
+import { optionFromNullable as tOpt } from "io-ts-types/lib/optionFromNullable"
 
-
-type ApiHandler = {
-  (req: Exp.Request): Exp.Response
-}
-
-type TypedRequest<A, P = EC.ParamsDictionary, Q = EC.Query > = {
+// reduced interface of Express' Request and Response type
+export type RawRequest = {
   headers: HTTP.IncomingHttpHeaders
-  typedBody: A
-  typedParams: P
-  typedQuery: Q
+  body: unknown
+  params: unknown
+  query: unknown
 }
 
-type TypedResponse<A> = {
+export type RawResponse = {
+  status: (n: number) => RawResponse
+  json: (a: unknown) => RawResponse
+}
+
+export type TypedRequest<A, P = unknown, Q = unknown > = {
+  headers: HTTP.IncomingHttpHeaders
+  body: A
+  params: P
+  query: Q
+}
+
+export type TypedResponse<A> = {
   status: number
   body: A
 }
 
-type TypedApiHandler<A, B, P = EC.ParamsDictionary, Q = EC.Query> = {
-  (req: TypedRequest<A, P, Q>): TypedResponse<B>
+export type HandleParseError = {
+  (e: T.Errors, resp: RawResponse): void
 }
 
-const wrap = <A, B, P, Q>(TA: T.Type<A>, TB: T.Type<B>, TP: T.Type<P>, TQ: T.Type<Q> ) => (h: TypedApiHandler<A, B, P, Q>) => (req: Exp.Request, resp: Exp.Response): void => {
-  const typedRespEi = Do(E.either)
-    .bind("reqBody", TA.decode(req.body))
-    .bind("reqParams", TP.decode(req.params))
-    .bind("reqQuery", TQ.decode(req.query))
-    .letL( "typedReq", ({reqBody, reqParams, reqQuery}) => ({
-      headers: req.headers,
-      typedBody: reqBody,
-      typedParams: reqParams,
-      typedQuery: reqQuery
-    }))
-    .letL("typedResp", ({typedReq}) => h(typedReq))
-    .return(({typedResp}) => typedResp )
+export type BuildHandler<A, B, P = unknown, Q = unknown> = 
+  (h: TypedApiHandler<A, B, P, Q>, handleError: HandleParseError) => HandlerFn
+export type HandlerFn = (req: RawRequest, res: RawResponse) => void
 
-  switch(typedRespEi._tag) {
-    case "Left":
-      resp.status(400).json(typedRespEi.left)
-      break
-    case "Right":
-      resp
-        .status(typedRespEi.right.status)
-        .json(TB.encode(typedRespEi.right.body))
-      break
+export type TypedApiHandler<A, B, P = unknown, Q = unknown> = 
+  (req: TypedRequest<A, P, Q>) => TypedResponse<B>
+
+type Decoder<A> = T.Decoder<unknown, A>
+type Encoder<A> = T.Encoder<unknown, A>
+
+export const defaultHandleError: HandleParseError = (e, res) => {
+  res.status(400).json(e)
+}
+
+export const wrap = 
+  <A, B, P, Q >(TA: Decoder<A>, TB: Encoder<B>, TP: Decoder<P>, TQ: Decoder<Q>): BuildHandler<A, B, P, Q> => 
+  (h: TypedApiHandler<A, B, P, Q>, handleError: HandleParseError = defaultHandleError): HandlerFn => 
+  (req: RawRequest, resp: RawResponse): void => {
+    const typedRespEi = Do(EI.either)
+      .bind("body", TA.decode(req.body))
+      .bind("params", TP.decode(req.params))
+      .bind("query", TQ.decode(req.query))
+      .letL( "typedReq", (o) => ({
+        ...o,
+        headers: req.headers
+      }))
+      .letL("typedResp", ({typedReq}) => h(typedReq))
+      .return(({typedResp}) => typedResp )
+
+    switch(typedRespEi._tag) {
+      case "Left":
+        handleError(typedRespEi.left, resp)
+        break
+      case "Right":
+        resp
+          .status(typedRespEi.right.status)
+          .json(TB.encode(typedRespEi.right.body))
+        break
+    }
+}
+
+export const wrapBodies = <A, B>(TA: Decoder<A>, TB: Encoder<B>): BuildHandler<A, B> =>
+  wrap(TA, TB, T.unknown, T.unknown)
+
+export const wrapGet = <B, P, Q>(TB: Encoder<B>, TP: Decoder<P>, TQ: Decoder<Q>): BuildHandler<unknown, B, P, Q> => 
+  wrap(T.unknown, TB, TP, TQ)
+export const wrapResponseBody = <B>(TB: Encoder<B>): BuildHandler<unknown, B> => 
+  wrapGet(TB, T.unknown, T.unknown)
+
+const test1 = wrap(
+  T.type({
+    hello: T.string,
+    maybe: tOpt(T.string)
+  }),
+  T.boolean,
+  T.type({ id: NumberFromString }), 
+  T.type({q: BooleanFromString})
+)(tReq => {
+  console.log(tReq.body)
+  tReq.body.maybe
+  tReq.params.id
+  return {
+    status: 201,
+    body: tReq.body.hello.length === 0
   }
-}
+}, defaultHandleError)
+const test2 = wrapBodies(
+  T.type({"hello": T.string}), T.number
+)(tReq => {
+  return {
+    status: 200,
+    body: 1000
+  }
+}, defaultHandleError)
+
+export const TestRouter = Exp.Router()
+TestRouter.post("/test/:id", test1)
+TestRouter.post("/test2", test2)

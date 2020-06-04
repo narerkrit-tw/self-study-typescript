@@ -28,6 +28,7 @@ const apiRouter = express.Router()
 const router = RestypedRouter<SampleAPI>(apiRouter)
 
 router.post("/sample", async (req, resp) => {
+  console.log(JSON.stringify(req.body))
   const decodeResult = SampleReq.decode(req.body)
   pipe(
     decodeResult,
