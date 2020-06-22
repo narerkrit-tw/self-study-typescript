@@ -1,6 +1,7 @@
 import * as Exp from "express"
 import { Do } from "fp-ts-contrib/lib/Do"
 import * as EI from "fp-ts/lib/Either"
+import * as OPT from "fp-ts/lib/Option"
 import * as HTTP from "http"
 import * as T from "io-ts"
 import { BooleanFromString } from "io-ts-types/lib/BooleanFromString"
@@ -44,7 +45,7 @@ export type TypedApiHandler<A, B, P = unknown, Q = unknown> =
   (req: TypedRequest<A, P, Q>) => TypedResponse<B>
 
 type Decoder<A> = T.Decoder<unknown, A>
-type Encoder<A> = T.Encoder<unknown, A>
+type Encoder<A> = T.Encoder<A, unknown>
 
 export const defaultHandleError: HandleParseError = (e, res) => {
   res.status(400).json(e)
@@ -90,16 +91,16 @@ const test1 = wrap(
     hello: T.string,
     maybe: tOpt(T.string)
   }),
-  T.boolean,
+  tOpt(T.boolean),
   T.type({ id: NumberFromString }), 
-  T.type({q: BooleanFromString})
+  T.type({ q: BooleanFromString })
 )(tReq => {
   console.log(tReq.body)
   tReq.body.maybe
   tReq.params.id
   return {
     status: 201,
-    body: tReq.body.hello.length === 0
+    body: OPT.some(tReq.body.hello.length === 0)
   }
 }, defaultHandleError)
 const test2 = wrapBodies(
