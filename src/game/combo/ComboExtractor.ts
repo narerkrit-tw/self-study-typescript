@@ -14,14 +14,14 @@ import { Func, Func2 } from "src/misc/Func"
 
 
 export type RankCombo = {
-  size: number;
-  comboCards: Nea<Card>;
-  rank: Rank;
+  size: number
+  comboCards: Nea<Card>
+  rank: Rank
 }
 
 export type SuitCombo = {
-  comboCards: Nea<Card>;
-  topCardRank: Rank;
+  comboCards: Nea<Card>
+  topCardRank: Rank
 }
 
 const RankComboOrd = Ord.contramap((r: RankCombo) => r.rank)(Rank.IsBounded)
