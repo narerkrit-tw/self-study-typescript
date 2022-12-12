@@ -23,7 +23,7 @@
   "dependencies": {
     "@types/express": "^4.17.6",
     "@types/express-ws": "^3.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-ws": "^4.0.0",
     "fp-ts": "^2.6.2",
     "fp-ts-contrib": "^0.1.15",
